@@ -1,178 +1,103 @@
-# Gold Trading Bot (XAUUSD)
+# Gold Trading Agent (XAUUSD): Risk-First Paper Trading with a Continuous-Learning Loop
 
-A production-ready, risk-first paper-trading bot for gold (XAUUSD) with a strict path to live deployment.
+A paper-trading system for **gold (XAUUSD)**. It is built around one constraint: **live trading is disabled by default** and can only be enabled after a strategy passes explicit deployment gates.
 
-**Live trading is DISABLED by default and requires passing ALL deployment gates.**
+It has two layers:
+
+1. **Strategy research.** 16 rule-based strategies run through a backtester with realistic costs, walk-forward testing and Monte-Carlo resampling. They are ranked by *robustness*, not raw return.
+2. **A continuous-learning agent.** It watches the market on five timeframes and streams ticks from a broker practice feed. It makes and grades its own predictions, keeps a journal and writes a daily report, all without placing real orders.
+
+| | |
+|---|---|
+| **Market** | XAUUSD spot gold (TradingView / OANDA practice feeds; yfinance and CSV supported) |
+| **Stack** | Python, pandas, NumPy, SciPy, `ta`, Click CLI, structlog, Matplotlib; a small read-only web dashboard (HTML/JS) |
+| **Scale** | ~21k lines of Python · 16 strategies · 8 market-intelligence modules · 18 learning-loop modules |
+| **Tests** | 30 pytest tests, all passing |
+| **Status** | Paper trading and research only; the live path is gated and off |
 
 ---
 
-## DISCLAIMER
+## Architecture
 
-This software is for educational and paper-trading purposes only. Past backtest and paper trading performance does NOT guarantee future results. Trading gold involves significant financial risk. You may lose money. The authors make no claims about profitability.
+```
+main.py                     CLI: backtest · paper-trade · gate-check · report · tournament · learn · learn-deep · learn-live · live (gated)
+config/                     default.yaml (master configuration) + loader (environment overrides)
+data/                       providers (TradingView, yfinance, CSV, OANDA), chronological splitter, regime + session labels, indicators
+strategies/                 base interface + 16 strategies: trend following, mean reversion, Asian-range breakout, momentum, momentum-trend,
+                            Ichimoku, multi-timeframe, RSI divergence, session momentum, smart money, stochastic RSI, triple EMA,
+                            volatility breakout, volume-price, cross-market, ensemble (voting / weighted consensus)
+backtest/                   bar-by-bar engine with costs · metrics · walk-forward · Monte-Carlo trade resampling
+risk/                       position sizing, drawdown limits, kill switches
+broker/                     broker interface · simulated paper broker · OANDA practice-account adapter
+paper_trade/                paper-trading loop
+live_trade_disabled/gate.py live trading blocked unless every deployment gate passes
+reports/                    strategy comparison reports + deployment-gate checker
+intelligence/               COT positioning, economic calendar, ICT concepts, cross-market universe with random-matrix cleaning,
+                            news, order flow, seasonality
+learn/                      the learning agent: market observer (5m/15m/1h/4h/1d snapshots), tick streamer, prediction engine,
+                            strategy lab and evolver, self-optimiser, mental-trade tracker, risk manager, journals, daily reports
+dashboard/                  read-only status dashboard (server + static page)
+tournament.py               strategy tournament
+run_learner.sh              runs the two learning services with automatic restart
+```
 
----
+## Results
 
-## Quick Start
+**Backtest comparison** ([`reports/`](reports/), 2026-05-21, ranked by robustness score):
+
+| Strategy | Robustness | Sharpe | Max DD | Profit factor | Trades |
+|---|---:|---:|---:|---:|---:|
+| Trend following | 0.838 | 1.34 | 2.09 % | 2.19 | 294 |
+| Mean reversion | 0.468 | 0.33 | 2.28 % | 1.32 | 103 |
+| Ensemble | 0.154 | −1.07 | 1.90 % | 0.00 | 8 |
+| Momentum | 0.151 | −0.90 | 3.24 % | 0.33 | 24 |
+
+Each report also lists **why each strategy may fail**: whipsaws in ranging markets, indicator lag, regime change, and data-feed problems. These are hypothetical backtests, and the deployment gate was built so that a good backtest alone can never switch on live trading.
+
+**Learning loop, live paper observation** (3–8 June 2026, from the agent's own state files in `learn/data/`):
+
+- The agent made and graded **27 directional predictions**: 11 correct, 4 partial, 12 wrong.
+- All 7 mental trades expired without reaching target or stop.
+
+Over that window the agent did not show a usable edge, and the journals record the lessons it drew.
+
+## Running it
 
 ```bash
-# 1. Clone and set up environment
-cd gold_trading_bot
-python -m venv venv
-source venv/bin/activate
+git clone https://github.com/chahatpatel2003/gold-trading-agent.git
+cd gold-trading-agent
+python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-
-# 2. Copy environment config
-cp .env.example .env
-
-# 3. Run backtest (with walk-forward + Monte Carlo)
-python main.py backtest
-
-# 4. Run paper trading simulation
+cp .env.example .env              # add practice-account credentials only if you use the OANDA / TradingView feeds
+python main.py backtest           # walk-forward + Monte Carlo
 python main.py paper-trade
-
-# 5. Check deployment gates
 python main.py gate-check
-
-# 6. Generate full comparison report
-python main.py report
-
-# 7. Run tests
 pytest tests/ -v
 ```
 
-## Project Structure
+Learning services: `bash run_learner.sh`. The script now finds its own folder. `PYTHON`, `GOLD_BOT_DIR` and `LOGDIR` can be overridden with environment variables; the defaults reproduce the original setup.
 
-```
-gold_trading_bot/
-├── main.py                    # CLI entry point
-├── config/
-│   ├── default.yaml           # Master configuration
-│   └── loader.py              # Config + env loader
-├── data/
-│   ├── provider.py            # Data fetching (yfinance, CSV)
-│   ├── splitter.py            # Train/val/test split, regime labeling
-│   └── indicators.py          # Technical indicators (SMA, EMA, ATR, RSI, MACD, etc.)
-├── strategies/
-│   ├── base.py                # Base strategy interface
-│   ├── trend_following.py     # MA crossover + ATR stop + trailing stop
-│   ├── mean_reversion.py      # Bollinger Bands + z-score + vol filter
-│   ├── breakout.py            # Asian session range breakout
-│   ├── momentum.py            # RSI + MACD + ADX filter
-│   └── ensemble.py            # Meta-strategy (voting + weighted consensus)
-├── risk/
-│   └── manager.py             # Position sizing, drawdown limits, kill switches
-├── backtest/
-│   ├── engine.py              # Bar-by-bar backtest with realistic costs
-│   ├── metrics.py             # Sharpe, Sortino, drawdown, profit factor, etc.
-│   ├── walk_forward.py        # Walk-forward out-of-sample testing
-│   └── monte_carlo.py         # Monte Carlo trade resampling
-├── broker/
-│   ├── base.py                # Broker abstraction interface
-│   └── paper.py               # Paper broker (simulated fills)
-├── paper_trade/
-│   └── runner.py              # Paper trading simulation loop
-├── live_trade_disabled/
-│   └── gate.py                # Live trading gate (DISABLED by default)
-├── reports/
-│   ├── generator.py           # Strategy comparison reports
-│   └── deployment_gate.py     # Deployment readiness checker
-├── logs/
-│   └── logger.py              # Structured logging (structlog)
-├── tests/
-│   ├── test_risk_manager.py
-│   ├── test_indicators.py
-│   ├── test_strategies.py
-│   ├── test_backtest.py
-│   └── test_live_gate.py
-├── requirements.txt
-├── .env.example
-├── .gitignore
-└── README.md
-```
+## What is not included
 
-## Strategies
+- **Recorded broker tick streams and price captures**, including the 500-snapshot observation log. These are broker / TradingView data and are kept private.
+- **Paper-signal logs and run logs.** They contain feed prices and account identifiers.
+- **`.env`.** Credentials.
+- **A third-party MetaTrader expert advisor (`.ex5`) and its settings files.** These are not this project's code.
+- **The original `gold_trading_bot.zip` snapshot.** `main.py`, `requirements.txt` and `run_learner.sh` existed only inside that archive and have been restored here. The archive itself is kept privately.
 
-| Strategy | Logic | Best Regime | Worst Regime |
-|----------|-------|-------------|--------------|
-| Trend Following | MA crossover + regime filter + ATR trailing stop | Strong trends | Ranging/choppy |
-| Mean Reversion | Bollinger Band / z-score entry + vol filter | Range-bound | Strong trends |
-| Breakout | Asian session range breakout + confirmation bars | Volatile opens | Quiet/low-vol |
-| Momentum | RSI + MACD + ADX confirmation | Established trends | Choppy/reversals |
-| Ensemble | Voting consensus of above strategies | Mixed | Correlated failures |
+## Third-party material
 
-## Risk Management
+- **CFTC Commitments of Traders data** cached in `learn/data/` is public U.S. government data and is not claimed.
+- **Analyst views** summarised in `learn/data/fundamentals.json` are attributed to the institutions named there.
+- **Method:** `intelligence/rmt_cleaner.py` implements the random-matrix cleaning of Ledoit and Péché (2011, arXiv:0911.3010).
+- **Trading concepts:** ICT-style concepts in `intelligence/ict_concepts.py` are publicly taught ideas, implemented independently.
+- **Data and broker services** (TradingView via the third-party `tvdatafeed` package, OANDA, yfinance) are used under their own terms. Their raw data is not redistributed here; the agent's own prediction records and one analysis chart contain a few feed prices.
+- **Open-source libraries** are installed as dependencies under their own licences; none are copied into this repository.
 
-- **Per-trade risk**: 0.25% of equity (configurable, max 0.5%)
-- **Daily loss limit**: 2% — stops all new trades for the day
-- **Total drawdown limit**: 10% — full kill switch
-- **Position sizing**: Based on ATR/volatility and stop distance
-- **No martingale**: Position size DECREASES after losses (equity-based)
-- **Kill switches**: Abnormal spread, data gaps, consecutive losses
-- **News blackout**: Configurable flat exposure during major releases
+## Notes
 
-## CLI Commands
+- Assembled on 2026-10-14. File contents are byte-identical to that snapshot (SHA-256 verified). The one exception is `run_learner.sh`, whose hardcoded home folder of the original machine was replaced by the portable settings above, without changing what the script runs.
+- `.env.example` contains variable names only, no values.
+- Research and paper trading only. Nothing here is investment advice.
 
-```bash
-# Full backtest with all strategies
-python main.py backtest
-
-# Backtest a specific strategy
-python main.py backtest --strategy trend_following
-
-# Skip Monte Carlo (faster)
-python main.py backtest --no-monte-carlo
-
-# Paper trade all strategies
-python main.py paper-trade
-
-# Check if ready for live deployment
-python main.py gate-check --strategy trend_following
-
-# Attempt live trading (WILL BE BLOCKED by default)
-python main.py live
-```
-
-## Deployment Gate Checklist
-
-The bot may only be marked "ready for cautious live testing" if ALL are true:
-
-- [ ] Out-of-sample Sharpe ratio >= 0.5
-- [ ] Maximum drawdown <= 15%
-- [ ] Profit factor >= 1.2
-- [ ] Paper trading results match backtest within 30% tolerance
-- [ ] Profitable across 3+ market regime windows
-- [ ] Monte Carlo P(20% ruin) < 10%
-- [ ] Minimum 30 trades for statistical significance
-- [ ] ENABLE_LIVE_TRADING=true in .env
-- [ ] live_trading_enabled: true in config YAML
-- [ ] Risks explicitly acknowledged in code
-
-## Why Paper Profits May Not Survive Live Trading
-
-1. **Slippage is worse in reality** — varies wildly during news/low liquidity
-2. **Spreads widen unpredictably** — can reach 5-10x normal during events
-3. **Execution latency** — real orders take time; prices move against you
-4. **Fill quality varies** — partial fills, requotes, rejections
-5. **Data feed issues** — missing bars, delays, disconnections
-6. **Psychology** — fear/greed cause system overrides
-7. **Regime changes** — the future will differ from the backtest period
-8. **Overfitting** — some degree is inevitable despite walk-forward testing
-9. **Black swans** — gold reacts violently to unpredictable geopolitical events
-10. **Broker risks** — outages, margin changes, policy changes
-
-## Configuration
-
-All parameters are in `config/default.yaml`. Key sections:
-
-- `general` — symbol, timeframe, live trading flag
-- `data` — provider, date range, train/val/test split
-- `costs` — spread, slippage, commission
-- `risk` — per-trade risk, drawdown limits, kill switches
-- `strategies` — per-strategy parameters
-- `backtest` — walk-forward and Monte Carlo settings
-- `paper_trade` — paper trading configuration
-- `deployment_gate` — thresholds for go-live decision
-
-## License
-
-For educational and personal use. No warranty. Trade at your own risk.
+© Chahat Patel. All rights reserved. This notice covers the original code, documentation and research results in this repository. It does not extend to the third-party material listed above, which belongs to its respective owners. No license to reuse this code is granted; it is published for review.
