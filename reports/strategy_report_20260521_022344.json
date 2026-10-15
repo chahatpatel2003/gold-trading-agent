@@ -1,0 +1,438 @@
+{
+  "generated_at": "2026-05-21T02:23:44.356810",
+  "disclaimer": "DISCLAIMER: Past performance does NOT guarantee future results. Backtest results are hypothetical and subject to overfitting. Paper trading results may not survive live trading conditions. See 'Why Paper Profits May Not Survive Live Trading' section.",
+  "strategies": {
+    "trend_following": {
+      "backtest_metrics": {
+        "total_return_pct": 35.76,
+        "cagr_pct": 4.48,
+        "max_drawdown_pct": 2.09,
+        "sharpe_ratio": 1.338,
+        "sortino_ratio": 3.677,
+        "profit_factor": 2.192,
+        "win_rate_pct": 45.92,
+        "expectancy_per_trade": 121.63,
+        "exposure_time_pct": 83.74,
+        "num_trades": 294,
+        "avg_win": 487.13,
+        "avg_loss": -188.7,
+        "max_consecutive_wins": 6,
+        "max_consecutive_losses": 5,
+        "stability": 0.9592
+      },
+      "signals_generated": 294,
+      "signals_rejected": 0,
+      "rejection_reasons": {},
+      "walk_forward": {
+        "oos_metrics": {
+          "total_return_pct": 5.15,
+          "cagr_pct": 47.43,
+          "max_drawdown_pct": 3.04,
+          "sharpe_ratio": 2.437,
+          "sortino_ratio": 1.112,
+          "profit_factor": 2.313,
+          "win_rate_pct": 47.06,
+          "expectancy_per_trade": 118.4,
+          "exposure_time_pct": 52.53,
+          "num_trades": 85,
+          "avg_win": 443.26,
+          "avg_loss": -170.36,
+          "max_consecutive_wins": 4,
+          "max_consecutive_losses": 5,
+          "stability": 0.29
+        },
+        "window_details": [
+          {
+            "window": 0,
+            "is_start": "2018-01-02 00:00:00",
+            "is_end": "2021-12-21 00:00:00",
+            "oos_start": "2021-12-22 00:00:00",
+            "oos_end": "2022-12-19 00:00:00",
+            "oos_sharpe": 1.002,
+            "oos_return": 1.85,
+            "oos_max_dd": 0.75,
+            "oos_trades": 31
+          },
+          {
+            "window": 1,
+            "is_start": "2019-01-02 00:00:00",
+            "is_end": "2022-12-19 00:00:00",
+            "oos_start": "2022-12-20 00:00:00",
+            "oos_end": "2023-12-18 00:00:00",
+            "oos_sharpe": 0.859,
+            "oos_return": 3.06,
+            "oos_max_dd": 1.0,
+            "oos_trades": 31
+          },
+          {
+            "window": 2,
+            "is_start": "2019-12-30 00:00:00",
+            "is_end": "2023-12-18 00:00:00",
+            "oos_start": "2023-12-19 00:00:00",
+            "oos_end": "2024-12-16 00:00:00",
+            "oos_sharpe": 1.988,
+            "oos_return": 5.15,
+            "oos_max_dd": 0.3,
+            "oos_trades": 23
+          }
+        ],
+        "n_windows": 3
+      },
+      "monte_carlo": {
+        "sharpe_ci": [
+          3.334,
+          3.334
+        ],
+        "max_dd_ci": [
+          1.36,
+          3.82
+        ],
+        "return_ci": [
+          35.76,
+          35.76
+        ],
+        "worst_sharpe": 3.334,
+        "worst_max_dd": 5.24,
+        "prob_ruin_10pct": 0.0,
+        "prob_ruin_20pct": 0.0
+      }
+    },
+    "mean_reversion": {
+      "backtest_metrics": {
+        "total_return_pct": 4.27,
+        "cagr_pct": 0.6,
+        "max_drawdown_pct": 2.28,
+        "sharpe_ratio": 0.331,
+        "sortino_ratio": 0.675,
+        "profit_factor": 1.32,
+        "win_rate_pct": 43.69,
+        "expectancy_per_trade": 41.49,
+        "exposure_time_pct": 18.93,
+        "num_trades": 103,
+        "avg_win": 391.88,
+        "avg_loss": -230.36,
+        "max_consecutive_wins": 8,
+        "max_consecutive_losses": 8,
+        "stability": 0.0855
+      },
+      "signals_generated": 347,
+      "signals_rejected": 244,
+      "rejection_reasons": {
+        "kill_switch_consecutive_losses": 244
+      },
+      "walk_forward": {
+        "oos_metrics": {
+          "total_return_pct": 10.05,
+          "cagr_pct": 109.55,
+          "max_drawdown_pct": 4.36,
+          "sharpe_ratio": 3.049,
+          "sortino_ratio": 1.861,
+          "profit_factor": 2.38,
+          "win_rate_pct": 53.92,
+          "expectancy_per_trade": 148.9,
+          "exposure_time_pct": 46.4,
+          "num_trades": 102,
+          "avg_win": 476.25,
+          "avg_loss": -234.18,
+          "max_consecutive_wins": 5,
+          "max_consecutive_losses": 5,
+          "stability": 0.5813
+        },
+        "window_details": [
+          {
+            "window": 0,
+            "is_start": "2018-01-02 00:00:00",
+            "is_end": "2021-12-21 00:00:00",
+            "oos_start": "2021-12-22 00:00:00",
+            "oos_end": "2022-12-19 00:00:00",
+            "oos_sharpe": 0.527,
+            "oos_return": 1.02,
+            "oos_max_dd": 1.2,
+            "oos_trades": 30
+          },
+          {
+            "window": 1,
+            "is_start": "2019-01-02 00:00:00",
+            "is_end": "2022-12-19 00:00:00",
+            "oos_start": "2022-12-20 00:00:00",
+            "oos_end": "2023-12-18 00:00:00",
+            "oos_sharpe": 1.149,
+            "oos_return": 4.12,
+            "oos_max_dd": 0.58,
+            "oos_trades": 32
+          },
+          {
+            "window": 2,
+            "is_start": "2019-12-30 00:00:00",
+            "is_end": "2023-12-18 00:00:00",
+            "oos_start": "2023-12-19 00:00:00",
+            "oos_end": "2024-12-16 00:00:00",
+            "oos_sharpe": 1.407,
+            "oos_return": 10.05,
+            "oos_max_dd": 0.8,
+            "oos_trades": 40
+          }
+        ],
+        "n_windows": 3
+      },
+      "monte_carlo": {
+        "sharpe_ci": [
+          1.334,
+          1.334
+        ],
+        "max_dd_ci": [
+          1.77,
+          4.9
+        ],
+        "return_ci": [
+          4.27,
+          4.27
+        ],
+        "worst_sharpe": 1.334,
+        "worst_max_dd": 6.58,
+        "prob_ruin_10pct": 0.0,
+        "prob_ruin_20pct": 0.0
+      }
+    },
+    "momentum": {
+      "backtest_metrics": {
+        "total_return_pct": -3.24,
+        "cagr_pct": -0.47,
+        "max_drawdown_pct": 3.24,
+        "sharpe_ratio": -0.895,
+        "sortino_ratio": -3.5,
+        "profit_factor": 0.327,
+        "win_rate_pct": 16.67,
+        "expectancy_per_trade": -134.94,
+        "exposure_time_pct": 22.23,
+        "num_trades": 24,
+        "avg_win": 392.56,
+        "avg_loss": -240.44,
+        "max_consecutive_wins": 2,
+        "max_consecutive_losses": 8,
+        "stability": 0.5977
+      },
+      "signals_generated": 195,
+      "signals_rejected": 171,
+      "rejection_reasons": {
+        "kill_switch_consecutive_losses": 171
+      },
+      "walk_forward": {
+        "oos_metrics": {
+          "total_return_pct": -1.92,
+          "cagr_pct": -13.92,
+          "max_drawdown_pct": 2.88,
+          "sharpe_ratio": -2.13,
+          "sortino_ratio": -4.14,
+          "profit_factor": 0.686,
+          "win_rate_pct": 17.65,
+          "expectancy_per_trade": -63.26,
+          "exposure_time_pct": 50.53,
+          "num_trades": 34,
+          "avg_win": 784.66,
+          "avg_loss": -244.95,
+          "max_consecutive_wins": 2,
+          "max_consecutive_losses": 10,
+          "stability": 0.263
+        },
+        "window_details": [
+          {
+            "window": 0,
+            "is_start": "2018-01-02 00:00:00",
+            "is_end": "2021-12-21 00:00:00",
+            "oos_start": "2021-12-22 00:00:00",
+            "oos_end": "2022-12-19 00:00:00",
+            "oos_sharpe": 0.011,
+            "oos_return": 0.0,
+            "oos_max_dd": 1.23,
+            "oos_trades": 14
+          },
+          {
+            "window": 1,
+            "is_start": "2019-01-02 00:00:00",
+            "is_end": "2022-12-19 00:00:00",
+            "oos_start": "2022-12-20 00:00:00",
+            "oos_end": "2023-12-18 00:00:00",
+            "oos_sharpe": -0.144,
+            "oos_return": -0.23,
+            "oos_max_dd": 1.23,
+            "oos_trades": 12
+          },
+          {
+            "window": 2,
+            "is_start": "2019-12-30 00:00:00",
+            "is_end": "2023-12-18 00:00:00",
+            "oos_start": "2023-12-19 00:00:00",
+            "oos_end": "2024-12-16 00:00:00",
+            "oos_sharpe": -2.882,
+            "oos_return": -1.92,
+            "oos_max_dd": 1.92,
+            "oos_trades": 8
+          }
+        ],
+        "n_windows": 3
+      },
+      "monte_carlo": {
+        "sharpe_ci": [
+          -8.761,
+          -8.761
+        ],
+        "max_dd_ci": [
+          3.24,
+          4.26
+        ],
+        "return_ci": [
+          -3.24,
+          -3.24
+        ],
+        "worst_sharpe": -8.761,
+        "worst_max_dd": 4.58,
+        "prob_ruin_10pct": 0.0,
+        "prob_ruin_20pct": 0.0
+      }
+    },
+    "ensemble": {
+      "backtest_metrics": {
+        "total_return_pct": -1.9,
+        "cagr_pct": -0.27,
+        "max_drawdown_pct": 1.9,
+        "sharpe_ratio": -1.071,
+        "sortino_ratio": -1.125,
+        "profit_factor": 0.0,
+        "win_rate_pct": 0.0,
+        "expectancy_per_trade": -237.63,
+        "exposure_time_pct": 7.96,
+        "num_trades": 8,
+        "avg_win": 0.0,
+        "avg_loss": -237.63,
+        "max_consecutive_wins": 0,
+        "max_consecutive_losses": 8,
+        "stability": 0.5766
+      },
+      "signals_generated": 67,
+      "signals_rejected": 59,
+      "rejection_reasons": {
+        "kill_switch_consecutive_losses": 59
+      },
+      "walk_forward": {
+        "oos_metrics": {
+          "total_return_pct": -0.35,
+          "cagr_pct": -2.67,
+          "max_drawdown_pct": 1.22,
+          "sharpe_ratio": -0.495,
+          "sortino_ratio": -2.577,
+          "profit_factor": 0.519,
+          "win_rate_pct": 22.22,
+          "expectancy_per_trade": -90.32,
+          "exposure_time_pct": 39.47,
+          "num_trades": 18,
+          "avg_win": 439.41,
+          "avg_loss": -241.68,
+          "max_consecutive_wins": 2,
+          "max_consecutive_losses": 8,
+          "stability": 0.0197
+        },
+        "window_details": [
+          {
+            "window": 0,
+            "is_start": "2018-01-02 00:00:00",
+            "is_end": "2021-12-21 00:00:00",
+            "oos_start": "2021-12-22 00:00:00",
+            "oos_end": "2022-12-19 00:00:00",
+            "oos_sharpe": -2.266,
+            "oos_return": -1.22,
+            "oos_max_dd": 1.22,
+            "oos_trades": 5
+          },
+          {
+            "window": 1,
+            "is_start": "2019-01-02 00:00:00",
+            "is_end": "2022-12-19 00:00:00",
+            "oos_start": "2022-12-20 00:00:00",
+            "oos_end": "2023-12-18 00:00:00",
+            "oos_sharpe": -0.054,
+            "oos_return": -0.05,
+            "oos_max_dd": 0.74,
+            "oos_trades": 6
+          },
+          {
+            "window": 2,
+            "is_start": "2019-12-30 00:00:00",
+            "is_end": "2023-12-18 00:00:00",
+            "oos_start": "2023-12-19 00:00:00",
+            "oos_end": "2024-12-16 00:00:00",
+            "oos_sharpe": -0.386,
+            "oos_return": -0.35,
+            "oos_max_dd": 0.7,
+            "oos_trades": 7
+          }
+        ],
+        "n_windows": 3
+      },
+      "monte_carlo": {
+        "sharpe_ci": [
+          -262.128,
+          -262.128
+        ],
+        "max_dd_ci": [
+          1.9,
+          1.9
+        ],
+        "return_ci": [
+          -1.9,
+          -1.9
+        ],
+        "worst_sharpe": -262.128,
+        "worst_max_dd": 1.9,
+        "prob_ruin_10pct": 0.0,
+        "prob_ruin_20pct": 0.0
+      }
+    }
+  },
+  "ranking": [
+    {
+      "strategy": "trend_following",
+      "robustness_score": 0.8382,
+      "sharpe": 1.338,
+      "max_drawdown": 2.09,
+      "profit_factor": 2.192,
+      "stability": 0.9592,
+      "num_trades": 294
+    },
+    {
+      "strategy": "mean_reversion",
+      "robustness_score": 0.4676,
+      "sharpe": 0.331,
+      "max_drawdown": 2.28,
+      "profit_factor": 1.32,
+      "stability": 0.0855,
+      "num_trades": 103
+    },
+    {
+      "strategy": "ensemble",
+      "robustness_score": 0.154,
+      "sharpe": -1.071,
+      "max_drawdown": 1.9,
+      "profit_factor": 0.0,
+      "stability": 0.5766,
+      "num_trades": 8
+    },
+    {
+      "strategy": "momentum",
+      "robustness_score": 0.1512,
+      "sharpe": -0.895,
+      "max_drawdown": 3.24,
+      "profit_factor": 0.327,
+      "stability": 0.5977,
+      "num_trades": 24
+    }
+  ],
+  "why_strategies_may_fail": {
+    "trend_following": "Whipsaws in ranging markets. Moving averages lag inherently. Gold can range for months, generating many small losses. Regime filter helps but cannot predict transitions.",
+    "mean_reversion": "Gets crushed in strong trends. 'The market can stay irrational longer than you can stay solvent.' Volatility filter limits trade count. The concept of 'mean' shifts during regime changes.",
+    "breakout": "False breakouts are extremely common. Low trade frequency limits statistical power. News-driven spikes look like breakouts but reverse. Asian range may be too tight or too wide.",
+    "momentum": "All indicators lag \u2014 by the time they confirm, the move may be over. RSI stays overbought/oversold for extended periods in strong trends. MACD generates constant whipsaws in choppy markets.",
+    "ensemble": "Only as good as its components. Weighting by recent Sharpe is itself a form of curve-fitting. If all strategies fail in the same regime, the ensemble fails too. Added complexity may not help."
+  },
+  "why_paper_profits_may_not_survive": "\nWHY PAPER PROFITS MAY NOT SURVIVE LIVE TRADING\n================================================\n\n1. SLIPPAGE IS WORSE IN REALITY\n   Paper trading assumes constant slippage. Real slippage varies wildly\n   during news events, low liquidity, and market gaps. Gold can gap\n   significantly on geopolitical events.\n\n2. SPREAD WIDENS UNPREDICTABLY\n   Retail spreads on XAUUSD can widen to 5-10x normal during news releases,\n   market opens, and low-liquidity periods (e.g., around Christmas/New Year).\n\n3. EXECUTION LATENCY\n   Paper trading executes instantly. Real orders take time to fill, and\n   prices can move against you during that time. This is especially true\n   for strategies that depend on precise entry levels.\n\n4. FILL QUALITY VARIES\n   Market orders may not fill at the expected price. Limit orders may not\n   fill at all. Partial fills create sizing problems.\n\n5. DATA FEED ISSUES\n   Missing bars, delayed data, and price feed disconnections are common.\n   Paper trading uses clean historical data; live data is messy.\n\n6. PSYCHOLOGICAL FACTORS\n   Fear and greed cause traders to override their system. You may cut\n   winners too early, hold losers too long, or skip signals after a\n   losing streak.\n\n7. REGIME CHANGES\n   The market regime during your backtest/paper period may not persist.\n   A strategy optimized for trending markets will fail in range-bound markets.\n\n8. OVERFITTING\n   Despite walk-forward testing and Monte Carlo analysis, some degree of\n   overfitting to historical patterns is inevitable. The future WILL differ\n   from the past.\n\n9. BLACK SWAN EVENTS\n   Gold responds violently to geopolitical crises, central bank announcements,\n   and systemic financial events that are inherently unpredictable.\n\n10. BROKER-SPECIFIC RISKS\n    Real brokers may reject orders, change margin requirements, have outages,\n    or modify trading conditions without warning.\n\nRECOMMENDATION: Start live trading with 25-50% of intended position size.\nMonitor for at least 2-4 weeks at reduced size. Only scale up if live results\nmatch paper trading within the configured tolerance.\n"
+}
